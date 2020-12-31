@@ -43,6 +43,7 @@ export default function InputSelect({label, options = [], placeholder}) {
         styles={customStyles}
         options={options}
         placeholder={placeholder}
+        isDisabled={!options || options.length === 0}
       />
 
     </Container>
