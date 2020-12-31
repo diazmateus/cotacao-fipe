@@ -1,17 +1,23 @@
 import styled from 'styled-components'
 import Head from 'next/head'
-import fruits from '../components/frutas'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import InputSelect from '../components/Select'
-
-const options = fruits.map((d, i) => ({
-  value: d,
-  label: d
-}))
+import { mapOptionsToSelect } from '../utils'
 
 
 export default function Home() {
-  const [fruit, setFruit] = useState(options[0].value)
+  const [brands, setBrands] = useState([])
+
+  useEffect(() => {
+    const getMarcas = async () => {
+      let response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas`)
+      let data = await response.json()
+      data = mapOptionsToSelect(data)
+      setBrands(data)
+    }
+
+    getMarcas()
+  }, [])
 
   return (
     <Container>
@@ -28,8 +34,8 @@ export default function Home() {
       <Form>
         <InputSelect
           label="Selecione a marca"
-          options={options}
-          placeholder="Yamaha, Honda, Toyota..."
+          options={brands}
+          placeholder="Audi, Honda, Toyota..."
         />
       </Form>
 
@@ -46,7 +52,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
+
   @media (max-width: 768px) {
     padding: 32px;
   }
@@ -87,6 +93,6 @@ const Form = styled.form`
   @media (max-width: 768px) {
     width: 100%;
     padding: 16px;
-    
+
   }
 `
