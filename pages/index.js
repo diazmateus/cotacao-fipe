@@ -1,65 +1,110 @@
+import styled from 'styled-components'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Select from 'react-select'
+import fruits from '../components/frutas'
+import React, { useState } from 'react'
+
+const options = fruits.map((d, i) => ({
+  value: d,
+  label: d
+}))
+
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    borderBottom: '1px solid #eee',
+    color: state.isSelected ? '#fff' : '#242424',
+    padding: 12
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    width: '100%',
+    height: '50px',
+    fontSize: '16px',
+    background: '#fff',
+    borderColor: '#fff',
+    color: '#fff',
+    borderRadius: '4px',
+    padding: '4px 8px'
+  }),
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1
+    const transition = 'opacity 300ms'
+
+    return {...provided, opacity, transition}
+  }
+}
 
 export default function Home() {
+  const [fruit, setFruit] = useState(options[0].value)
+
   return (
-    <div className={styles.container}>
+    <Container>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.gstatic.com"/>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet"/>
+        <title>Cotação FIPE</title>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <Title>COTAÇÃO FIPE</Title>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+      <Form>
+        <Input
+          styles={customStyles}
+          options={options}/>
+      </Form>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`
+
+const Title = styled.h1`
+  font-size: 36px;
+  color: #f0f0f0;
+  font-weight: 400;
+  padding: 32px;
+
+  @media (max-width: 768px) {
+    font-size: 26px;
+  }
+`
+
+const Flex = styled.div`
+  //display: grid;
+  //grid-template-columns: repeat(3, 1fr);
+  //grid-auto-rows: 100px;
+  //grid-gap: 5px 8px;
+  //padding: 20px 10px;
+`
+
+const Box = styled.div`
+  padding: 32px;
+  background: linear-gradient(45deg, #1E00F5, #7b00f5);
+`
+
+const Form = styled.form`
+  width: auto;
+  min-width: 50%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`
+
+const Input = styled(Select)`
+  color: #000;
+  text-align: left;
+`
