@@ -1,39 +1,14 @@
 import styled from 'styled-components'
 import Head from 'next/head'
-import Select from 'react-select'
 import fruits from '../components/frutas'
 import React, { useState } from 'react'
+import InputSelect from '../components/Select'
 
 const options = fruits.map((d, i) => ({
   value: d,
   label: d
 }))
 
-const customStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    borderBottom: '1px solid #eee',
-    color: state.isSelected ? '#fff' : '#242424',
-    padding: 12
-  }),
-  control: (provided, state) => ({
-    ...provided,
-    width: '100%',
-    height: '50px',
-    fontSize: '16px',
-    background: '#fff',
-    borderColor: '#fff',
-    color: '#fff',
-    borderRadius: '4px',
-    padding: '4px 8px'
-  }),
-  singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 0.5 : 1
-    const transition = 'opacity 300ms'
-
-    return {...provided, opacity, transition}
-  }
-}
 
 export default function Home() {
   const [fruit, setFruit] = useState(options[0].value)
@@ -51,9 +26,11 @@ export default function Home() {
       <Title>COTAÇÃO FIPE</Title>
 
       <Form>
-        <Input
-          styles={customStyles}
-          options={options}/>
+        <InputSelect
+          label="Selecione a marca"
+          options={options}
+          placeholder="Yamaha, Honda, Toyota..."
+        />
       </Form>
 
 
@@ -69,13 +46,17 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  
+  @media (max-width: 768px) {
+    padding: 32px;
+  }
 `
 
 const Title = styled.h1`
   font-size: 36px;
-  color: #f0f0f0;
   font-weight: 400;
   padding: 32px;
+  color: #6a50c7;
 
   @media (max-width: 768px) {
     font-size: 26px;
@@ -98,13 +79,14 @@ const Box = styled.div`
 const Form = styled.form`
   width: auto;
   min-width: 50%;
+  background-color: #26282F;
+  padding: 48px;
+  border-radius: 16px;
+  height: 50%;
 
   @media (max-width: 768px) {
     width: 100%;
+    padding: 16px;
+    
   }
-`
-
-const Input = styled(Select)`
-  color: #000;
-  text-align: left;
 `

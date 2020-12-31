@@ -1,80 +1,71 @@
-import React, { useRef } from 'react'
-import useSelect from 'use-select'
+import React, { useState } from 'react'
+import Select from 'react-select'
+import styled from 'styled-components'
 
-// Create your select component
-export default function Select({
-                    value,
-                    options,
-                    onChange,
-                    multi,
-                    pageSize = 10,
-                    itemHeight = 40
-                  }) {
-  // Create a ref for the options container
-  const optionsRef = useRef()
 
-  // Use useSelect to manage select state
-  const {
-    visibleOptions,
-    selectedOption,
-    highlightedOption,
-    getInputProps,
-    getOptionProps,
-    isOpen
-  } = useSelect({
-    multi,
-    options,
-    value,
-    onChange,
-    optionsRef
-  })
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    borderBottom: '1px solid #eee',
+    color: state.isSelected ? '#0E1115' : '#0E1115',
+    padding: 12,
+  }),
+  control: (provided, state) => ({
+    ...provided,
+    width: '100%',
+    height: '50px',
+    fontSize: '16px',
+    background: '#0E1115',
+    borderColor: '#0E1115',
+    color: '#c4c0ca',
+    borderRadius: '4px',
+    padding: '4px 8px'
+  }),
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1
+    const transition = 'opacity 300ms'
 
-  // Build your select component
+    return {
+      ...provided,
+      opacity,
+      transition,
+      color: "#c4c0ca"
+    }
+  }
+}
+
+export default function InputSelect({label, options = [], placeholder}) {
+
   return (
-    <div>
-      {multi ? (
-        <div>
-          {selectedOption.map(option => (
-            <div key={option.value}>
-              {option.value}{' '}
-              <span
-                onClick={() => onChange(value.filter(d => d !== option.value))}
-              >
-                x
-              </span>
-            </div>
-          ))}
-        </div>
-      ) : null}
-      <input {...getInputProps()} placeholder="Select one..." />
-      <div>
-        {isOpen ? (
-          <div ref={optionsRef}>
-            {!visibleOptions.length ? (
-              <div>No options were found...</div>
-            ) : null}
-            {visibleOptions.map(option => {
-              return (
-                <div
-                  {...getOptionProps({
-                    option,
-                    style: {
-                      background: `${props =>
-                        highlightedOption === option
-                          ? 'lightblue'
-                          : selectedOption === option
-                          ? 'lightgray'
-                          : 'white'}`
-                    }
-                  })}
-                >
-                  {option.label}
-                </div>
-              )
-            })}
-          </div>
-        ) : null}
-      </div>
-    </div>
+    <Container>
+      <Label>{label}</Label>
+      <Input
+        styles={customStyles}
+        options={options}
+        placeholder={placeholder}
+      />
+
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: block;
+  text-align: left;
+`
+
+const Label = styled.span`
+  font-size: 16px;
+  font-weight: 400;
+  display: block;
+  padding: 8px 18px;
+
+  @media (max-width: 768px) {
+    font-size: 26px;
+  }
+`
+
+const Input = styled(Select)`
+  color: #000;
+  text-align: left;
+`
